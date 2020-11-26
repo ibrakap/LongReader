@@ -27,6 +27,12 @@
     <ClCompile Include="CScroll.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="COpenFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WinHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WinHelper.h">
@@ -45,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CScroll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="COpenFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,23 +1,20 @@
-#include <iostream>
-#include "WinFile.h"
-#include <Windows.h>
 #include "WinHelper.h"
-#include "resource.h"
-
+#include "WinFile.h"
+#include "COpenFile.h"
 #include "CSurface.h"
+#include "CScroll.h"
 
 LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam);
-#define ID_EDITCHILD 99888
 
 SCROLLINFO si;
 HINSTANCE gInstance;
 File f;
 char* Buffer = nullptr;
-DWORD FP;
-OPENFILENAMEW opf;
 wchar_t FileNameBuf[500];
 
 CSurface Surface;
+COpenFile oDlg;
+CScroll Scroll;
 int REQ;
 
 
@@ -46,13 +43,10 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
     {
     case WM_CREATE:
     {
+        oDlg.SetHwnd(hwnd, gInstance);
         Surface.SetHwnd(hwnd);
-        si.cbSize = sizeof(SCROLLINFO);
-        si.fMask = SIF_RANGE | SIF_PAGE;
-        si.nMin = 0;
-        si.nMax = 80;
-        si.nPage = 10;
-        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        Scroll.SetHwnd(hwnd);
+        Scroll.CreateScroll(0, 80, 10);
         break;
     }
     case WM_COMMAND:
@@ -61,14 +55,8 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
         {
             case ID_OPEN_OPENFILE:
             {
-                opf.lStructSize = sizeof(OPENFILENAMEW);
-                opf.hwndOwner = hwnd;
-                opf.hInstance = gInstance;
-                opf.lpstrFile = FileNameBuf;
-                opf.nMaxFile = 500;
-                GetOpenFileNameW(&opf);
-
-                REQ = REQUEST_CLEAR;
+                const char* outp = oDlg.GetFileName();
+                REQ = REQUEST_CLEAR_AND_DRAW;
                 InvalidateRect(hwnd, NULL, TRUE);
                 break;
             }
@@ -110,69 +98,50 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
     case WM_VSCROLL:
     {
         nPos = (short int)HIWORD(wParam);
+        Scroll.GetScrollInfo();
 
-        si.cbSize = sizeof(si);
-        si.fMask = SIF_ALL;
-        GetScrollInfo(hwnd, SB_VERT, &si);
-
-        nNewPos = si.nPos;
         switch (LOWORD(wParam))
         {
         case SB_LINEDOWN:
         {
-            nNewPos += 10;
+            Scroll.pos += 10;
             break;
         }
         case SB_LINEUP:
         {
-            nNewPos -= 10;
+            Scroll.pos -= 10;
             break;
         }
         case SB_THUMBPOSITION:
         {
-            nNewPos = nPos + si.nMin;
+            Scroll.pos = nPos + Scroll.min;
             break;
         }
         }
-        si.fMask = SIF_POS;
-        si.nPos = nNewPos;
-        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        Scroll.SetScrollPos(Scroll.pos);
         break;
     }
     case WM_MOUSEWHEEL:
     {
-        si.cbSize = sizeof(si);
-        si.fMask = SIF_ALL;
-        GetScrollInfo(hwnd, SB_VERT, &si);
-
+        Scroll.GetScrollInfo();
         wheel = GET_WHEEL_DELTA_WPARAM(wParam);
 
         switch (wheel)
         {
             case WHEEL_UP:
             {
-             
-                si.nPos -= 10;
-                if (f.getpos() < 8192) break;
-                f.seek(-8192, SeekMode::current);
-                Buffer = f.read(4096);
+                Scroll.pos -= 10;
                 InvalidateRect(hwnd, NULL, TRUE);
                 break;
             }
             case WHEEL_DOWN:
             {
-                si.nPos += 10;
-                DWORD FPOS = f.getpos();
-                DWORD FSIZE = f.getsize();
-                if (FPOS == FSIZE || FPOS > FSIZE) break;
-                Buffer = f.read(4096);
+                Scroll.pos += 10;
                 InvalidateRect(hwnd, NULL, TRUE);
                 break; 
             }
         }
-
-        si.fMask = SIF_POS;
-        SetScrollInfo(hwnd, SB_VERT, &si, TRUE);
+        Scroll.SetScrollPos(Scroll.pos);
         break;
     }
     case WM_PAINT:
@@ -182,6 +151,12 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
         if (REQ == REQUEST_CLEAR)
         {
             Surface.ClearSurface();
+            REQ = 0;
+        }
+        else if (REQ == REQUEST_CLEAR_AND_DRAW)
+        {
+            Surface.ClearSurface();
+            Surface.DrawTextOnSurface(Buffer);
             REQ = 0;
         }
         else

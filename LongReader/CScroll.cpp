@@ -27,4 +27,6 @@ void CScroll::GetScrollInfo()
     si.cbSize   = sizeof(SCROLLINFO);
     si.fMask    = SIF_ALL;
     ::GetScrollInfo(hWnd, SB_VERT, &si);
+    pos = si.nPos;
+    min = si.nMin;
 }
