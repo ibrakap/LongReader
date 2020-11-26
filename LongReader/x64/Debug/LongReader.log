@@ -1,2 +1,9 @@
-﻿  LongReader.cpp
+﻿  CScroll.cpp
+  CSurface.cpp
+  WinFile.cpp
+C:\Users\ibrakap\source\repos\LongReader\LongReader\WinFile.cpp(149,1): warning C4297: 'File::~File': function assumed not to throw an exception but does
+C:\Users\ibrakap\source\repos\LongReader\LongReader\WinFile.cpp(149,1): message : destructor or deallocator has a (possibly implicit) non-throwing exception specification
+  LongReader.cpp
+C:\Users\ibrakap\source\repos\LongReader\LongReader\LongReader.cpp(34,29): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
+  Generating Code...
   LongReader.vcxproj -> C:\Users\ibrakap\source\repos\LongReader\x64\Debug\LongReader.exe

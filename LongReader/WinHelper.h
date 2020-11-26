@@ -40,20 +40,6 @@ WPARAM LoopMyMessageLoop(MSG& Message, HWND hWnd)
     }
     return Message.wParam;
 }
-VOID ClearSurface(const HDC& hdc, const PAINTSTRUCT& ps)
-{
-    FillRect(hdc, &ps.rcPaint, (HBRUSH)GetStockObject(WHITE_BRUSH));
-}
-VOID DrawSurface()
-{
 
-}
-VOID DrawTextOnSurface(const HDC& hdc, const char* Buffer)
-{
-    RECT  rect;
-    rect.left = 0;
-    rect.top = 0;
-    DrawTextA(hdc, Buffer, -1, &rect, DT_NOCLIP);
-}
 #define REQUEST_CLEAR 12
 #define REQUEST_DRAW  13

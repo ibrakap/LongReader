@@ -139,10 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CScroll.cpp" />
+    <ClCompile Include="CSurface.cpp" />
     <ClCompile Include="WinFile.cpp" />
     <ClCompile Include="LongReader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CScroll.h" />
+    <ClInclude Include="CSurface.h" />
     <ClInclude Include="WinAlloc.h" />
     <ClInclude Include="WinFile.h" />
     <ClInclude Include="resource.h" />

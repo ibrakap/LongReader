@@ -4,6 +4,8 @@
 #include "WinHelper.h"
 #include "resource.h"
 
+#include "CSurface.h"
+
 LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam);
 #define ID_EDITCHILD 99888
 
@@ -15,6 +17,7 @@ DWORD FP;
 OPENFILENAMEW opf;
 wchar_t FileNameBuf[500];
 
+CSurface Surface;
 int REQ;
 
 
@@ -43,9 +46,7 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
     {
     case WM_CREATE:
     {
-        f.open(R"(C:\Users\ibrakap\Desktop\data_dump.sql)", FileMode::FILE_READ);
-        Buffer = f.read(4096);
-
+        Surface.SetHwnd(hwnd);
         si.cbSize = sizeof(SCROLLINFO);
         si.fMask = SIF_RANGE | SIF_PAGE;
         si.nMin = 0;
@@ -66,6 +67,7 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
                 opf.lpstrFile = FileNameBuf;
                 opf.nMaxFile = 500;
                 GetOpenFileNameW(&opf);
+
                 REQ = REQUEST_CLEAR;
                 InvalidateRect(hwnd, NULL, TRUE);
                 break;
@@ -78,7 +80,7 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
             }
             case ID_HELP_ABOUT:
             {
-                MessageBoxW(hwnd, L"Written by ibrakap", L"LongReader about", MB_OK | MB_DEFBUTTON1 | MB_ICONINFORMATION);
+                MessageBoxW(hwnd, L"Written by ibrakap", L"About", MB_OK | MB_ICONINFORMATION);
                 break;
             }
             case ID_OPEN_EXIT:
@@ -175,18 +177,18 @@ LRESULT CALLBACK WindowProc(_In_ HWND   hwnd, _In_ UINT   uMsg, _In_ WPARAM wPar
     }
     case WM_PAINT:
     {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hwnd, &ps);
+        Surface.BeginDraw();
 
         if (REQ == REQUEST_CLEAR)
         {
-            ClearSurface(hdc, ps);
+            Surface.ClearSurface();
+            REQ = 0;
         }
         else
         {
-            DrawTextOnSurface(hdc, Buffer);
+            Surface.DrawTextOnSurface(Buffer);
         }
-        EndPaint(hwnd, &ps);
+        Surface.EndDraw();
         break;
     }
     default:
