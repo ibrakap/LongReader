@@ -2,3 +2,6 @@
 Debug/
 Release/
 x64/
+LongReader/x64
+LongReader/Release
+LongReader/Debug

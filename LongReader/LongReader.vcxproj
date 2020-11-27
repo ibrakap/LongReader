@@ -142,6 +142,7 @@
     <ClCompile Include="COpenFile.cpp" />
     <ClCompile Include="CScroll.cpp" />
     <ClCompile Include="CSurface.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="WinFile.cpp" />
     <ClCompile Include="LongReader.cpp" />
     <ClCompile Include="WinHelper.cpp" />
@@ -150,6 +151,7 @@
     <ClInclude Include="COpenFile.h" />
     <ClInclude Include="CScroll.h" />
     <ClInclude Include="CSurface.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="WinAlloc.h" />
     <ClInclude Include="WinFile.h" />
     <ClInclude Include="resource.h" />

@@ -19,6 +19,7 @@ void CSurface::DrawTextOnSurface(const char* buffer)
 {
 	rect.left = 0;
 	rect.top = 0;
+	// TextOutA(hDc, 0, 0, buffer, strlen(buffer));
 	DrawTextA(hDc, buffer, -1, &rect, DT_NOCLIP);
 }
 

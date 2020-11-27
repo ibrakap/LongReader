@@ -7,6 +7,7 @@
 #define REQUEST_CLEAR 12
 #define REQUEST_DRAW  13
 #define REQUEST_CLEAR_AND_DRAW 14
+#define REQUEST_SCROLL_AND_DRAW 15
 
 
 ATOM RegisterMyWindowClass(WNDCLASSEXW& WinClass, const WNDPROC& WndProc, HINSTANCE hInstance);

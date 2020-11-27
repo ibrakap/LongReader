@@ -11,5 +11,4 @@ private:
 	HWND hWnd;
 	HINSTANCE hInstance;
 	std::string FileString;
-	wchar_t FileNameBuffer[500];
 };

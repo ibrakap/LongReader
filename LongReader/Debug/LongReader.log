@@ -1,5 +1,0 @@
-﻿  CScroll.cpp
-  LongReader.cpp
-C:\Users\ibrakap\source\repos\LongReader\LongReader\LongReader.cpp(40,9): warning C4101: 'nNewPos': unreferenced local variable
-  Generating Code...
-  LongReader.vcxproj -> C:\Users\ibrakap\source\repos\LongReader\Debug\LongReader.exe

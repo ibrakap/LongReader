@@ -44,9 +44,11 @@ void File::open(const char* Filepath, DWORD mode)
 	}
 }
 
-DWORD File::getsize()
+uint64_t File::getsize()
 {
-	return GetFileSize(hFile, NULL);
+	LARGE_INTEGER li;
+	GetFileSizeEx(hFile, &li);
+	return li.QuadPart;
 }
 DWORD File::getpos()
 {
@@ -61,33 +63,28 @@ DWORD File::getpos()
 	}
 }
 
-char* File::read()
+void File::read(std::string& Buffer)
 {
-
 	DWORD SizeOfFile = getsize() - getpos();	
-	char* Buffer = (char*)malloc(SizeOfFile + 1);
-	Buffer[SizeOfFile] = '\0';
+	Buffer.resize(SizeOfFile);
 	
 	DWORD ReadBytes;
-	BOOL bRead = ReadFile(hFile, (void*)Buffer, SizeOfFile, &ReadBytes, NULL);
+	BOOL bRead = ReadFile(hFile, (void*)&Buffer[0], SizeOfFile, &ReadBytes, NULL);
 	if (bRead == FALSE)
 	{
 		throw std::runtime_error("Read failed!");
 	}
-	return Buffer;
 }
-char* File::read(DWORD NumberOfBytesToRead)
+void File::read(std::string& Buffer, DWORD NumberOfBytesToRead)
 {
-	char* Buffer = (char*)malloc(NumberOfBytesToRead + 1);
-	Buffer[NumberOfBytesToRead] = '\0';
-
+	Buffer.resize(NumberOfBytesToRead);
 	DWORD ReadBytes;
-	BOOL bRead = ReadFile(hFile, (void*)Buffer, NumberOfBytesToRead, &ReadBytes, NULL);
+	BOOL bRead = ReadFile(hFile, (void*)&Buffer[0], NumberOfBytesToRead, &ReadBytes, NULL);
 	if (bRead == FALSE)
 	{
 		throw std::runtime_error("Read failed!");
 	}
-	return Buffer;
+
 }
 
 

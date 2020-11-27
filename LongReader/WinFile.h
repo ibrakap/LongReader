@@ -1,11 +1,8 @@
+#pragma once
 #include <iostream>
 #include <Windows.h>
 
 #define DBG_STR(X) 	OutputDebugStringA(X)
-
-
-
-
 
 namespace FileMode
 {
@@ -30,11 +27,11 @@ public:
 	// Open read close
 	void open(const char* Filepath, DWORD mode);
 	
-	char* read();
-	char* read(DWORD NumberOfBytesToRead);
+	void read(std::string& Buffer);
+	void read(std::string& Buffer, DWORD NumberOfBytesToRead);
 
 	
-	DWORD getsize();
+	uint64_t getsize();
 	DWORD getpos();
 
 	void seek(LONG pos, DWORD mode);
